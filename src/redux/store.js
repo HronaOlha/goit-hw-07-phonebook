@@ -1,55 +1,96 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { contactsReduser } from './contactsSlice';
+// import { contactsReduser } from './contactsSlice';
 import { filterReducer } from './filterSlice';
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { moviesReducer } from './reducerFetch';
+import { contactsReducer } from './reducerFetch';
 
 const rootReducer = combineReducers({
-  contacts: contactsReduser,
+  contacts: contactsReducer,
   filter: filterReducer,
-  movies: moviesReducer,
+  // movies: moviesReducer,
 });
-
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['contacts'],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-// const customMiddleware = store => {
-//   return next => {
-//     return action => {
-//       // console.log('action :>> ', action);
-//       if (typeof action === 'function') {
-//         action(store.dispatch);
-//         return;
-//       }
-//       return next(action);
-//     };
-//   };
-// };
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-  // middleware: [customMiddleware],
+  reducer: rootReducer,
 });
 
-export const persistor = persistStore(store);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// import { combineReducers, configureStore } from '@reduxjs/toolkit';
+// import { contactsReduser } from './contactsSlice';
+// import { filterReducer } from './filterSlice';
+// import {
+//   persistStore,
+//   persistReducer,
+//   FLUSH,
+//   REHYDRATE,
+//   PAUSE,
+//   PERSIST,
+//   PURGE,
+//   REGISTER,
+// } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
+// import { moviesReducer } from './reducerFetch';
+
+// const rootReducer = combineReducers({
+//   contacts: contactsReduser,
+//   filter: filterReducer,
+//   movies: moviesReducer,
+// });
+
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+//   whitelist: ['contacts'],
+// };
+
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// export const store = configureStore({
+//   reducer: persistedReducer,
+//   middleware: getDefaultMiddleware =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//       },
+//     }),
+// });
+
+// export const persistor = persistStore(store);

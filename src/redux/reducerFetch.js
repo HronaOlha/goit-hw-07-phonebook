@@ -1,24 +1,84 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const fetchMovies = async () => {
+export const fetchContacts = async () => {
   const data = await fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=2ead4d55a2c7da4f5313610b563685be`
+    `https://6453dfb6c18adbbdfeaa041f.mockapi.io/contacts/contacts`
   );
-  const movies = await data.json();
-  return movies;
+  const contacts = await data.json();
+  return contacts;
 };
 
-export const movieFetch = createAsyncThunk('movies/getTopMovies', async () => {
-  return await fetchMovies();
-});
+export const addContacts = async newContact => {
+  const data = await fetch(
+    `https://6453dfb6c18adbbdfeaa041f.mockapi.io/contacts/contacts`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(newContact),
+    }
+  );
+
+  const addedData = await data.json();
+  return await addedData;
+};
+
+export const deleteContacts = async id => {
+  const data = await fetch(
+    `https://6453dfb6c18adbbdfeaa041f.mockapi.io/contacts/contacts/${id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+
+  const deleteRes = await data.json();
+  return await deleteRes;
+};
+
+export const contactsFetch = createAsyncThunk(
+  'contacts/getContacts',
+  async () => {
+    return await fetchContacts();
+  }
+);
+export const contactsDelete = createAsyncThunk(
+  'movies/deleteContacts',
+  async id => {
+    return await deleteContacts(id);
+  }
+);
+export const contactsAdd = createAsyncThunk(
+  'movies/addContacts',
+  async newContact => {
+    return await addContacts(newContact);
+  }
+);
+
+const initialState = {
+  contacts: null,
+  isLoading: false,
+  error: '',
+};
 
 const handlePending = (state, action) => {
   state.isLoading = true;
 };
-
 const handleFulfilled = (state, action) => {
   state.isLoading = false;
-  state.movies = action.payload;
+  state.contacts = action.payload;
+  state.error = '';
+};
+
+const deleteHandleFulfilled = (state, action) => {
+  state.isLoading = false;
+  state.contacts = state.contacts.filter(
+    contact => contact.id !== action.payload.id
+  );
+  state.error = '';
+};
+const addHandleFulfilled = (state, action) => {
+  state.isLoading = false;
+  state.contacts = [...state.contacts, action.payload];
+
   state.error = '';
 };
 
@@ -27,67 +87,21 @@ const handleRejected = (state, action) => {
   state.error = action.payload;
 };
 
-const initialState = {
-  movies: null,
-  isLoading: false,
-  error: '',
-};
-
 const mySlice = createSlice({
-  name: 'movies',
+  name: 'contacts',
   initialState,
   extraReducers: builder => {
     builder
-      .addCase(movieFetch.pending, handlePending)
-      .addCase(movieFetch.fulfilled, handleFulfilled)
-      .addCase(movieFetch.rejected, handleRejected);
+      .addCase(contactsFetch.pending, handlePending)
+      .addCase(contactsFetch.fulfilled, handleFulfilled)
+      .addCase(contactsFetch.rejected, handleRejected)
+      .addCase(contactsDelete.pending, handlePending)
+      .addCase(contactsDelete.fulfilled, deleteHandleFulfilled)
+      .addCase(contactsDelete.rejected, handleRejected)
+      .addCase(contactsAdd.pending, handlePending)
+      .addCase(contactsAdd.fulfilled, addHandleFulfilled)
+      .addCase(contactsAdd.rejected, handleRejected);
   },
 });
 
-export const moviesReducer = mySlice.reducer;
-
-// extraReducers: {
-//   [movieFetch.pending]: (state, action) => {
-//     state.isLoading = true;
-//   },
-//   [movieFetch.fulfilled]: (state, action) => {
-//     state.isLoading = false;
-//     state.movies = action.payload;
-//     state.error = '';
-//   },
-//   [movieFetch.rejected]: (state, action) => {
-//     state.isLoading = false;
-//     state.error = action.payload;
-//   },
-// },
-
-// export const movieFetch = () => {
-//   return async dispatch => {
-//     try {
-//       dispatch(mySlice.actions.fetching());
-//       const data = await fetch(
-//         `https://api.themoviedb.org/3/trending/movie/day?api_key=2ead4d55a2c7da4f5313610b563685be`
-//       );
-//       const movies = await data.json();
-//       console.log('movies :>> ', movies);
-//       dispatch(mySlice.actions.fetchSuccess(movies));
-//     } catch (error) {
-//       dispatch(mySlice.actions.fetchError(error));
-//     }
-//   };
-// };
-
-// reducers: {
-//   fetching: (state, action) => {
-//     state.isLoading = true;
-//   },
-//   fetchSuccess: (state, action) => {
-//     state.isLoading = false;
-//     state.movies = action.payload;
-//     state.error = '';
-//   },
-//   fetchError: (state, action) => {
-//     state.isLoading = false;
-//     state.error = action.payload;
-//   },
-// },
+export const contactsReducer = mySlice.reducer;

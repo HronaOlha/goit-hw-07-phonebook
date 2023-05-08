@@ -2,7 +2,6 @@ import { addFilter } from 'redux/filterSlice';
 import { Label, Input } from './Filter.styled';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { movieFetch } from 'redux/reducerFetch';
 
 const Filter = () => {
   const { filter } = useSelector(state => state);
@@ -23,9 +22,6 @@ const Filter = () => {
           onChange={handleInputChange}
         />
       </Label>
-      <button type="submit" onClick={() => dispatch(movieFetch())}>
-        Thunk
-      </button>
     </>
   );
 };
