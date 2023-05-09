@@ -5,6 +5,18 @@ export const fetchContacts = async () => {
   const contacts = await data.json();
   return contacts;
 };
+//   const data =
+//     (await fetch(
+//       `https://6453dfb6c18adbbdfeaa041f.mockapi.io/contacts/contacts`
+//     ),
+//     {
+//       method: 'GET',
+//       headers: { 'content-type': 'application/json' },
+//     });
+//   const contacts = await data.json();
+//   console.log('contacts :>> ', contacts);
+//   return contacts;
+// };
 
 export const addContacts = async newContact => {
   const data = await fetch(

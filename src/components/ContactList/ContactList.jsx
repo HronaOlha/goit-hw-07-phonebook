@@ -26,12 +26,16 @@ const ContactList = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(
-    () => () => {
-      dispatch(contactsFetch());
-    },
-    [dispatch]
-  );
+  // useEffect(
+  //   () => () => {
+  //     dispatch(contactsFetch());
+  //   },
+  //   [dispatch]
+  // );
+
+  useEffect(() => {
+    dispatch(contactsFetch());
+  }, [dispatch]);
 
   return (
     <>

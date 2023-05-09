@@ -4,7 +4,6 @@ import {
   deleteContacts,
   fetchContacts,
 } from 'services/fetchContactsAPI';
-// import { addContacts, deleteContacts, fetchContacts } from './reducerFetch';
 
 export const contactsFetch = createAsyncThunk(
   'contacts/getContacts',
