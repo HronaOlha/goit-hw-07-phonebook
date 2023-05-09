@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
-
 import { Button, Input, Form, Label } from './ContactForm.styled';
-
 import { useDispatch, useSelector } from 'react-redux';
-
-import { contactsAdd } from 'redux/reducerFetch';
+import { contactsAdd } from 'redux/operations';
 
 const ContactForm = () => {
   const { contacts } = useSelector(state => state.contacts);
@@ -50,13 +47,11 @@ const ContactForm = () => {
 
   const handleSubmit = obj => {
     const contactsName = contacts.map(contact => contact.name);
-    // console.log('contactsName :>> ', contactsName);
     if (contactsName.includes(obj.name)) {
       alert(`${obj.name} is already in contacts.`);
       return;
     }
 
-    // dispatch(addContact(obj));
     dispatch(contactsAdd(obj));
   };
 
