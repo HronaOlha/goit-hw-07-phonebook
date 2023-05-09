@@ -1,22 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { contactsAdd, contactsDelete, contactsFetch } from './operations';
+import {
+  addHandleFulfilled,
+  deleteHandleFulfilled,
+  getHandleFulfilled,
+  handleFulfilled,
+  handlePending,
+  handleRejected,
+} from './reducers';
 
-const initialState = [
-  { id: 'id-1', name: 'Héloïse Letissier', number: '4591256' },
-  { id: 'id-2', name: 'Gwendoline Christie', number: '4438912' },
-];
+const arrThunks = [contactsAdd, contactsDelete, contactsFetch];
+const thunksType = type => arrThunks.map(thunk => thunk[type]);
 
-const contactSlice = createSlice({
+const mySlice = createSlice({
   name: 'contacts',
-  initialState,
-  reducers: {
-    addContact(state, action) {
-      return [...state, action.payload];
-    },
-    deleteContact(state, action) {
-      return state.filter(contact => contact.id !== action.payload);
-    },
+  initialState: {
+    contacts: null,
+    isLoading: false,
+    error: '',
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(contactsFetch.fulfilled, getHandleFulfilled)
+      .addCase(contactsDelete.fulfilled, deleteHandleFulfilled)
+      .addCase(contactsAdd.fulfilled, addHandleFulfilled)
+      .addMatcher(isAnyOf(...thunksType('pending')), handlePending)
+      .addMatcher(isAnyOf(...thunksType('rejected')), handleRejected)
+      .addMatcher(isAnyOf(...thunksType('fulfilled')), handleFulfilled);
   },
 });
 
-export const { addContact, deleteContact } = contactSlice.actions;
-export const contactsReduser = contactSlice.reducer;
+export const contactsReducer = mySlice.reducer;

@@ -4,10 +4,16 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoaderIco } from 'components/Loader/Loader';
 import { contactsFetch } from 'redux/operations';
+import {
+  selectFilters,
+  selectIContacts,
+  selectIsLoading,
+} from 'redux/selectors';
 
 const ContactList = () => {
-  const { filter } = useSelector(state => state);
-  const { contacts, isLoading } = useSelector(state => state.contacts);
+  const filter = useSelector(selectFilters);
+  const contacts = useSelector(selectIContacts);
+  const isLoading = useSelector(selectIsLoading);
 
   const handleFilter = () => {
     return (
